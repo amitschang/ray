@@ -104,6 +104,7 @@ class RayParams:
             used by the raylet process.
         temp_dir: If provided, it will specify the root temporary
             directory for the Ray process. Must be an absolute path.
+        log_dir: If provided, it will specify the root log directory for
         storage: Specify a URI for persistent cluster-wide storage. This storage path
             must be accessible by all nodes of the cluster, otherwise an error will be
             raised.
@@ -177,6 +178,7 @@ class RayParams:
         plasma_store_socket_name: Optional[str] = None,
         raylet_socket_name: Optional[str] = None,
         temp_dir: Optional[str] = None,
+        log_dir: Optional[str] = None,
         storage: Optional[str] = None,
         runtime_env_dir_name: Optional[str] = None,
         include_log_monitor: Optional[str] = None,
@@ -233,6 +235,7 @@ class RayParams:
         self.plasma_store_socket_name = plasma_store_socket_name
         self.raylet_socket_name = raylet_socket_name
         self.temp_dir = temp_dir
+        self.log_dir = log_dir
         self.storage = storage or os.environ.get(
             ray_constants.RAY_STORAGE_ENVIRONMENT_VARIABLE
         )
@@ -450,6 +453,9 @@ class RayParams:
 
         if self.temp_dir is not None and not os.path.isabs(self.temp_dir):
             raise ValueError("temp_dir must be absolute path or None.")
+
+        if self.log_dir is not None and not os.path.isabs(self.log_dir):
+            raise ValueError("log_dir must be absolute path or None.")
 
         validate_node_labels(self.labels)
 

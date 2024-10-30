@@ -560,6 +560,11 @@ Windows powershell users need additional escaping:
     "works when --head is specified",
 )
 @click.option(
+    "--log-dir",
+    default=None,
+    help="log directory other than under temp-dir"
+)
+@click.option(
     "--storage",
     default=None,
     help="the persistent storage URI for the cluster. Experimental.",
@@ -658,6 +663,7 @@ def start(
     plasma_store_socket_name,
     raylet_socket_name,
     temp_dir,
+    log_dir,
     storage,
     system_config,
     enable_object_reconstruction,
@@ -742,6 +748,7 @@ def start(
         plasma_store_socket_name=plasma_store_socket_name,
         raylet_socket_name=raylet_socket_name,
         temp_dir=temp_dir,
+        log_dir=log_dir,
         storage=storage,
         include_dashboard=include_dashboard,
         dashboard_host=dashboard_host,

@@ -485,8 +485,17 @@ class Node:
         self._sockets_dir = os.path.join(self._session_dir, "sockets")
         try_to_create_directory(self._sockets_dir)
         # Create a directory to be used for process log files.
-        self._logs_dir = os.path.join(self._session_dir, "logs")
-        try_to_create_directory(self._logs_dir)
+        session_logs_dir = os.path.join(self._session_dir, "logs")
+        if self._ray_params.log_dir is not None:
+            self._logs_dir = os.path.join(self._ray_params.log_dir, self._session_name)
+            if self._logs_dir == self._session_dir:
+                self._logs_dir = session_logs_dir
+            else:
+                try_to_create_directory(self._logs_dir)
+                try_to_symlink(session_logs_dir, self._logs_dir)
+        else:
+            self._logs_dir = session_logs_dir
+            try_to_create_directory(self._logs_dir)
         old_logs_dir = os.path.join(self._logs_dir, "old")
         try_to_create_directory(old_logs_dir)
         # Create a directory to be used for runtime environment.
